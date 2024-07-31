@@ -1,4 +1,4 @@
-**BD-RENTALS | QBCORE VEHICLE RENTAL SCRIPT**
+**BD-RENTALS | QBCORE & ESX VEHICLE RENTAL SCRIPT**
 
 **Join Discord for support**               | https://discord.gg/hya9t8XfH8
 
