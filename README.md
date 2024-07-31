@@ -5,6 +5,7 @@
 # Vehicle Rental 
 - Customize vehicle and pricing options
 - Add as many locations as you'd like (Each location can have different vehicles)
+- Toggle if you want blips on or off
 - Players receive rental papers with meta data displaying renter's name, vehicle, and licence plate (rented)
 
 # Compatibility
