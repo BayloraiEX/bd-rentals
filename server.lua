@@ -22,12 +22,11 @@ end
 RegisterNetEvent('bd-rentals:server:RentVehicle', function(vehicle, plate)
     local src = source
     local player_name = PlayerName(src)
-    if Config.InventorySystem == 'ox' then
+    if config.InventorySystem == 'ox' then
         exports.ox_inventory:AddItem(src, 'rentalpapers', 1, 
             {description = 'Owner: '..player_name..' | Plate: RENTAL | Vehicle: '..vehicle:gsub("^%l", string.upper)}
         )
-    elseif Config.InventorySystem == 'qb' then
-        --
+    elseif config.InventorySystem == 'qb' then
         exports['qb-inventory']:AddItem(src, 'rentalpapers', 1, 
             {description = 'Owner: '..player_name..' | Plate: RENTAL | Vehicle: '..vehicle:gsub("^%l", string.upper)})
         TriggerClientEvent('qb-inventory:client:ItemBox', source, QBCore.Shared.Items['rentalpapers'], 'add', 1)
