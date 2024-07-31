@@ -2,8 +2,8 @@ config = {}
 
 -- target resource (only one of these can be true)
 -------------------------------------------------------
-config.qbtarget = true  
-config.oxtarget = false  
+config.qbtarget = false
+config.oxtarget = true
 -------------------------------------------------------
 
 config.InventorySystem = 'ox' -- Supports 'ox' & 'qb'
