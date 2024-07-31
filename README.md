@@ -9,7 +9,7 @@
 
 # Compatibility
 
-**Requires:** ox_lib | ox_inventory 
+**Requires:** ox_lib | ox_inventory | qb-inventory
 
 **Frameworks:** QB | ESX
 
@@ -17,9 +17,9 @@
 
 # Installation:
 
-1. add `rt-rentals` to your resources folder | Make sure folder is UNZIPPED!
+1. add `bd-rentals` to your resources folder
 
-2. `ensure rt-rentals` in server.cfg if necessary
+2. `ensure bd-rentals` in server.cfg if necessary
 
 3. Add `Rental Papers` item to inventory:
 
