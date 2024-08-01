@@ -49,6 +49,8 @@ In qb-core --> shared --> items.lua add the following:
 rentalpapers                 = { name = 'rentalpapers',          label = 'Rental Papers',         weight = 0,       type = 'item',      image = 'rentalpapers.png',      unique = false,  useable = true,  shouldClose = true, description = 'Rental Papers'},
 ```
 
-4. Restart server
-
-5. Enjoy!
+4. Original created by https://github.com/SolosV1/solos-rentals
+5. Whats different?
+- qb inventory support
+- added blip option
+- changed plate to always say RENTED
