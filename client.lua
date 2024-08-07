@@ -154,7 +154,7 @@ RegisterNetEvent('bd-rentals:client:SpawnVehicle', function(vehiclename, locatio
 
     -- give keys 
     if QBCore then 
-        TriggerEvent("vehiclekeys:client:SetOwner", plate)
+        TriggerEvent("vehiclekeys:client:SetOwner", QBCore.Functions.GetPlate(plate))
     end
         
     SetModelAsNoLongerNeeded(vehicle)
