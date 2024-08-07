@@ -2,11 +2,11 @@ config = {}
 
 -- target resource (only one of these can be true)
 -------------------------------------------------------
-config.qbtarget = false
-config.oxtarget = true
+config.qbtarget = true
+config.oxtarget = false
 -------------------------------------------------------
 
-config.InventorySystem = 'ox' -- Supports 'ox' & 'qb'
+config.InventorySystem = 'qb' -- Supports 'ox' & 'qb'
 config.useBlip = true
 config.pedmodel = 'a_m_m_prolhost_01' -- ped model hash
 
