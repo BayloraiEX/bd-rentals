@@ -27,8 +27,7 @@ RegisterNetEvent('bd-rentals:server:RentVehicle', function(vehicle, plate)
             {description = 'Owner: '..player_name..' | Plate: RENTAL | Vehicle: '..vehicle:gsub("^%l", string.upper)}
         )
     elseif config.InventorySystem == 'qb' then
-        exports['qb-inventory']:AddItem(src, 'rentalpapers', 1, 
-            {description = 'Owner: '..player_name..' | Plate: RENTAL | Vehicle: '..vehicle:gsub("^%l", string.upper)})
+        exports['qb-inventory']:AddItem(src, 'rentalpapers', 1, false, false)
         TriggerClientEvent('qb-inventory:client:ItemBox', source, QBCore.Shared.Items['rentalpapers'], 'add', 1)
     end
 end)
