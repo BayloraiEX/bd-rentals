@@ -20,7 +20,6 @@ server_script {
 }
 
 dependencies {
-    'ox_inventory',
     'ox_lib',
 }
 
