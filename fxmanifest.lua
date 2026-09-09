@@ -2,8 +2,8 @@ fx_version 'cerulean'
 game 'gta5'
 
 author 'Baylorai'
-description 'rt-rentals'
-version '1.0.1'
+description 'bd-rentals'
+version '1.5.0'
 
 
 shared_scripts {
