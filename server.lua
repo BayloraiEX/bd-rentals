@@ -1,6 +1,8 @@
 local QBCore = GetResourceState('qb-core') == 'started' and exports['qb-core']:GetCoreObject()
 local ESX = GetResourceState('es_extended') == 'started' and exports.es_extended:getSharedObject()
 
+local ActiveRentals = {}
+
 local function PlayerName(src)
     if QBCore then 
         local Player = QBCore.Functions.GetPlayer(src)
@@ -19,7 +21,53 @@ local function PlayerName(src)
     end
 end
 
-RegisterNetEvent('bd-rentals:server:RentVehicle', function(vehicle, plate)
+local function GivePlayerMoney(src, amount)
+    amount = tonumber(amount) or 0
+    if amount <= 0 then return end
+    if QBCore then
+        local Player = QBCore.Functions.GetPlayer(src)
+        if Player then
+            Player.Functions.AddMoney('bank', amount)
+        end
+    elseif ESX then
+        local Player = ESX.GetPlayerFromId(src)
+        if Player then
+            Player.addAccountMoney('bank', amount)
+        end
+    end
+end
+
+local function RemoveRentalPapers(src)
+    if config.InventorySystem == 'ox' then
+        exports.ox_inventory:RemoveItem(src, 'rentalpapers', 1)
+    elseif config.InventorySystem == 'qb' then
+        exports['qb-inventory']:RemoveItem(src, 'rentalpapers', 1)
+        TriggerClientEvent('qb-inventory:client:ItemBox', src, QBCore.Shared.Items['rentalpapers'], 'remove', 1)
+    end
+end
+
+local function ExpireRental(src, netId)
+    local rental = ActiveRentals[src]
+    if not rental or rental.netId ~= netId then return end
+
+    TriggerClientEvent('bd-rentals:client:DeleteRentalVehicle', src, rental.netId)
+    RemoveRentalPapers(src)
+
+    local refund = math.floor((rental.price or 0) * config.expireRefundPercent + 0.5)
+    GivePlayerMoney(src, refund)
+
+    TriggerClientEvent('ox_lib:notify', src, {
+        id = 'rental_expired',
+        description = 'Your rental period has ended. The vehicle has been reclaimed. $'..refund..' refunded to your bank.',
+        position = 'center-right',
+        icon = 'clock',
+        iconColor = '#C53030'
+    })
+
+    ActiveRentals[src] = nil
+end
+
+RegisterNetEvent('bd-rentals:server:RentVehicle', function(vehicle, plate, netId, duration, price)
     local src = source
     local player_name = PlayerName(src)
     if config.InventorySystem == 'ox' then
@@ -30,9 +78,55 @@ RegisterNetEvent('bd-rentals:server:RentVehicle', function(vehicle, plate)
         exports['qb-inventory']:AddItem(src, 'rentalpapers', 1, false, false)
         TriggerClientEvent('qb-inventory:client:ItemBox', source, QBCore.Shared.Items['rentalpapers'], 'add', 1)
     end
+
+    ActiveRentals[src] = {
+        netId = netId,
+        vehicle = vehicle,
+        plate = plate,
+        price = tonumber(price) or 0,
+    }
+
+    if duration and tonumber(duration) and tonumber(duration) > 0 then
+        local durationMs = tonumber(duration) * 60000
+        SetTimeout(durationMs, function()
+            ExpireRental(src, netId)
+        end)
+    end
 end)
 
-RegisterNetEvent('bd-rentals:server:MoneyAmounts', function(vehiclename, price, location)
+RegisterNetEvent('bd-rentals:server:ReturnVehicle', function()
+    local src = source
+    local rental = ActiveRentals[src]
+
+    if not rental then
+        TriggerClientEvent('ox_lib:notify', src, {
+            id = 'no_active_rental',
+            description = 'You do not have a rental vehicle to return.',
+            position = 'center-right',
+            icon = 'ban',
+            iconColor = '#C53030'
+        })
+        return 
+    end
+
+    TriggerClientEvent('bd-rentals:client:DeleteRentalVehicle', src, rental.netId)
+    RemoveRentalPapers(src)
+
+    local refund = math.floor((rental.price or 0) * config.returnRefundPercent + 0.5)
+    GivePlayerMoney(src, refund)
+
+    TriggerClientEvent('ox_lib:notify', src, {
+        id = 'rental_returned',
+        description = 'Vehicle returned successfully. $'..refund..' refunded to your bank.',
+        position = 'center-right',
+        icon = 'car',
+        iconColor = 'white'
+    })
+
+    ActiveRentals[src] = nil
+end)
+
+RegisterNetEvent('bd-rentals:server:MoneyAmounts', function(vehiclename, price, location, duration)
     local src = source
     local moneytype = 'bank'
     local price = tonumber(price)
@@ -80,7 +174,14 @@ RegisterNetEvent('bd-rentals:server:MoneyAmounts', function(vehiclename, price, 
         icon = 'car',
         iconColor = 'white'
     })
-    TriggerClientEvent('bd-rentals:client:SpawnVehicle', src, vehiclename, location)
+    TriggerClientEvent('bd-rentals:client:SpawnVehicle', src, vehiclename, location, duration, price)
+end)
+
+AddEventHandler('playerDropped', function()
+    local src = source
+    if ActiveRentals[src] then
+        ActiveRentals[src] = nil
+    end
 end)
 
 -- Version Check from https://github.com/CodineDev/cdn-fuel
