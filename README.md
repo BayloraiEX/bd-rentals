@@ -4,10 +4,11 @@
 
 # Vehicle Rental 
 - Customize vehicle and pricing options
-- Add as many locations as you'd like (Each location can have different vehicles)
-- Toggle if you want blips on or off
+- Add as many locations as you'd like (Each location can have different vehicles and blips)
+- Toggle if you want blips on or off per location
 - Players receive rental papers with meta data displaying renter's name, vehicle, and licence plate (rented)
-
+- Renting Time Options
+- Money back percentages when bringing vehicle back or time expiry ( default 25% money back on time expire & 75% money back if returned early )
 # Compatibility
 
 **Requires:** ox_lib | ox_inventory | qb-inventory
