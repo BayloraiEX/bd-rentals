@@ -53,5 +53,6 @@ rentalpapers                 = { name = 'rentalpapers',          label = 'Rental
 4. Original created by https://github.com/SolosV1/solos-rentals
 5. Whats different?
 - qb inventory support
-- added blip option
+- added per location blip option
 - changed plate to always say RENTED
+- added return vehicle with a change-able % back
